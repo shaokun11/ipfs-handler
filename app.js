@@ -19,9 +19,7 @@ async function uploadFile() {
     path: "test.mp4",
     content: fs.readFileSync("./test.mp4"),
   });
-  for await (x of file) {
-    console.log(x);
-  }
+   console.log(file);
 }
 
 async function read(cid) {
