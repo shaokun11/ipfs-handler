@@ -10,6 +10,7 @@
 
 <body>
     <input type='file' id="file" onChange="captureFile()" />
+    <img id="img"/>
     <button onclick="listItem()">
         list
     </button>
@@ -54,6 +55,17 @@
             }
         }
 
+        async function loadImg() {
+            var img = document.getElementById('img')
+            let arr =[]
+            let content = IPFS.cat('QmNUeoBGc5Lix65KVSq4mYcBAiNAxoPVJZHbMZAhmupWWz')
+            for await (let x of content) {
+                arr.push(x)
+            }
+            var blob = new Blob(arr)
+            img.src = window.URL.createObjectURL(blob);
+        }
+        loadImg()
     </script>
 
 </body>
