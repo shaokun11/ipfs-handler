@@ -1,0 +1,13 @@
+version: "3"
+services:
+  ipfs_host:
+    container_name: ipfs-os
+    image: ipfs/go-ipfs:latest
+    restart: always
+    volumes:
+      - /data/ipfs/os/export:/export                
+      - /data/ipfs/os/data:/data/ipfs                 
+    ports:
+      - 4002:4001
+      - 0.0.0.0:8082:8080
+      - 0.0.0.0:5002:5001

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client@48.1.1/dist/index.min.js"></script>
+</head>
+
+<body>
+    <input type='file' id="file" onChange="captureFile()" />
+    <button onclick="listItem()">
+        list
+    </button>
+    <script>
+        let dirCID
+        let IPFS = IpfsHttpClient({
+            host: "18.138.102.196",
+            port: "5002",
+            protocol: "http",
+        });
+        function captureFile() {
+            var x = document.getElementById("file");
+            saveToIpfs(x.files)
+        }
+
+        async function saveToIpfs([file]) {
+            try {
+                const added = await IPFS.addAll([{
+                    path: "/shaokun/test.png",
+                    content: file
+                },
+                {
+                    path: "/shaokun/name.txt",
+                    content: "hello world"
+                }
+                ], { progress: (prog) => console.log(`received: ${prog}`) })
+                for await (let item of added) {
+                    console.log(item)
+                    if (item.path === "sk") {
+                        dirCID = item.cid.toString()
+                    }
+                }
+            } catch (err) {
+                console.error(err)
+            }
+        }
+
+        async function listItem() {
+            const list = await IPFS.ls(dirCID)
+            for await (let item of list) {
+                console.log(item)
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
